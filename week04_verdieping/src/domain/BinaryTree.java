@@ -2,7 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 
-public class BinaryTree<E> {
+public class BinaryTree<E extends Comparable> {
     E data;
     BinaryTree<E> leftTree, rightTree;
 
@@ -77,6 +77,41 @@ public class BinaryTree<E> {
         return (leftTree != null && leftTree.contains(data)) || (rightTree != null && rightTree.contains(data));
 
     }
+
+    public int count(E data) {
+        int counter = 0;
+        if (data.compareTo(this.data) == 0) {
+            counter++;
+        }
+        if (this.leftTree != null) {
+            counter += this.leftTree.count(data);
+        }
+        if (this.rightTree != null) {
+            counter += this.rightTree.count(data);
+        }
+
+        return counter;
+    }
+
+    public ArrayList<E> getNodesAtDistance(int distance) {
+        ArrayList<E> nodes = new ArrayList<E>();
+        if (distance == 0) {
+            nodes.add(this.data);
+        } else {
+            if (leftTree != null) {
+                nodes.addAll(leftTree.getNodesAtDistance(distance - 1));
+            }
+            if (rightTree != null) {
+                nodes.addAll(rightTree.getNodesAtDistance(distance - 1));
+            }
+        }
+        return nodes;
+    }
+
+    public boolean kinderSom() {
+        return true;
+    }
+
 
     public boolean addNode(E data) {
         return true;
