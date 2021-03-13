@@ -1,6 +1,8 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class BinaryMinHeap<E extends Comparable<E>> {
     private ArrayList<E> values;
@@ -16,11 +18,12 @@ public class BinaryMinHeap<E extends Comparable<E>> {
             System.out.println(values);
     }
 
+    //Oefening 5.3
     public E getMin() {
         if (this.isEmpty())
             throw new IllegalStateException("Kan niet zoeken in een lege heap");
         //TO DO zie oefening 3
-        return null;
+        return values.get(0);
     }
 
     public boolean addValue(E value) {
@@ -35,8 +38,20 @@ public class BinaryMinHeap<E extends Comparable<E>> {
         return true;
     }
 
+    //Oefening 5.4
     private void bubbleUp() {
         //TO DO : oefening 4
+        int i = values.size() - 1;
+        int ip = (i - 1) / 2;
+        E objI = values.get(i);
+        E objIp = values.get(ip);
+        while (objI.compareTo(objIp) < 0) {
+            Collections.swap(values, i, ip);
+            i = ip;
+            ip = (i - 1) / 2;
+            objI = values.get(i);
+            objIp = values.get(ip);
+        }
     }
 
     public E removeSmallest() {
@@ -51,10 +66,55 @@ public class BinaryMinHeap<E extends Comparable<E>> {
 
     private void bubbleDown() {
         // TODO zie oefening 5
+        int i = 0;
+        int ilc = 1; //index left child
+        int irc = 2; //index right child
+        E objectI = values.get(i);
+        E objectIlc = values.get(ilc);
+        E objectIrc = values.get(irc);
+        int ic = (objectIlc.compareTo(objectIrc) < 0 ? ilc : irc);
+        E objectIc = values.get(ic);
+        while (objectIc.compareTo(objectI) < 0) {
+            Collections.swap(values, i, ic);
+            i = ic;
+            ilc = 2 * i + 1;
+            irc = 2 * i + 2;
+            objectI = values.get(i);
+            objectIlc = getObjectAtIndex(ilc);
+            objectIrc = getObjectAtIndex(irc);
+            if (objectIlc != null && objectIrc != null) {
+                ic = (objectIlc.compareTo(objectIrc) < 0 ? ilc : irc);
+            } else if (objectIlc == null && objectIrc == null) {
+                return;
+            } else {
+                ic = ilc;
+            }
+            objectIc = values.get(ic);
+        }
+    }
+
+    public E getObjectAtIndex(int i) {
+        if (i <= values.size() - 1) {
+            return values.get(i);
+        }
+        return null;
     }
 
     public ArrayList<E> getPath(E value) {
         // TODO zie oefening 6;
-        return null;
+        ArrayList<E> result = new ArrayList<>();
+        int index = values.indexOf(value);
+
+        if (index == -1) {
+            return null;
+        } else {
+            result.add(value);
+            while (index > 0) {
+                index = (index - 1) / 2;
+                result.add(0,values.get(index));
+            }
+        }
+        return result;
     }
 }
+
