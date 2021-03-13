@@ -14,11 +14,6 @@ public class BinarySearchTreeDriver {
         boom.addNode(9);
 
         printBoomInfo(boom);
-        System.out.println(boom.lookup(8));
-        System.out.println(boom.lookup(2));
-
-        System.out.println(boom.getPath(4));
-
     }
 
     private static void printBoomInfo(BinarySearchTree<Integer> boom) {
